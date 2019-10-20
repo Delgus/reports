@@ -1,0 +1,47 @@
+{
+  "categories": [
+    {
+      "name": "Пиццы",
+      "products": [
+        {
+          "name": "4сыра",
+          "count": 3,
+          "cost_sum": "451.382528",
+          "sell_sum": "1350.797474"
+        },
+        {
+          "name": "Мясное Плато",
+          "count": 6,
+          "cost_sum": "901.030302",
+          "sell_sum": "2850.585858"
+        }
+      ],
+      "count": 0,
+      "cost_sum": "",
+      "sell_sum": ""
+    },
+    {
+      "name": "Супы",
+      "products": [
+        {
+          "name": "Борщ",
+          "count": 3,
+          "cost_sum": "90.992558",
+          "sell_sum": "300.292929"
+        },
+        {
+          "name": "Харчо",
+          "count": 3,
+          "cost_sum": "60.505050",
+          "sell_sum": "200.585858"
+        }
+      ],
+      "count": 0,
+      "cost_sum": "",
+      "sell_sum": ""
+    }
+  ],
+  "count": 0,
+  "cost_sum": "",
+  "sell_sum": ""
+}
