@@ -15,11 +15,10 @@ test: ## Run unittests
 
 build: ## Build the binary file
 	@go build -a -o bin/report1 -v $(PKG)/cmd/report1
-	##@go build -a -o bin/report2 -v $(PKG)/cmd/report2
-	##@go build -a -o bin/report3 -v $(PKG)/cmd/report3
+	@go build -a -o bin/report2 -v $(PKG)/cmd/report2
 
 clean: ## Remove previous build
-	@rm -f bin/report1 ##bin/report2 bin/report3
+	@rm -f bin/report1 bin/report2
 
 bench: ## Benchmark for code
 	@go test ./... -bench=. -benchmem

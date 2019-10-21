@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	connStr := "user=postgres password=123456 dbname=postgres sslmode=disable"
+	connStr := "host=postgres user=postgres password=123456 dbname=postgres sslmode=disable port=5432"
 	db, err := sqlx.Open("postgres", connStr)
 	if err != nil {
 		panic(err)
