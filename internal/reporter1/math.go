@@ -1,14 +1,12 @@
-package v1
+package reporter1
 
 import (
 	"fmt"
 	"math/big"
 	"strconv"
-	"strings"
 )
 
 const (
-	delimiter         = "."
 	priceFormat       = "%.2f"
 	quantityPrecision = 6
 )
@@ -24,16 +22,6 @@ func sum(s1, s2 string) string {
 		return "error"
 	}
 	return new(big.Float).Add(f1, f2).Text('f', quantityPrecision)
-}
-
-//убирает незначащие нули
-func truncateZeros(s string) string {
-	if !strings.Contains(s, delimiter) {
-		return s
-	}
-	s = strings.TrimRight(s, "0")
-	s = strings.TrimRight(s, delimiter)
-	return s
 }
 
 //форматирует в формат цены

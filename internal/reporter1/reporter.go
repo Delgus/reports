@@ -1,4 +1,4 @@
-package v1
+package reporter1
 
 import (
 	"encoding/json"
@@ -25,6 +25,7 @@ func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
 		if err := json.NewEncoder(w).Encode(&Error{Message: "Ooops!"}); err != nil {
 			log.Println(err)
 		}
+		return
 	}
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(report); err != nil {
@@ -45,6 +46,7 @@ func (r *Reporter) XLSX(w http.ResponseWriter, req *http.Request) {
 		if err := json.NewEncoder(w).Encode(&Error{Message: "Ooops!"}); err != nil {
 			log.Println(err)
 		}
+		return
 	}
 
 	if err := report.Write(w); err != nil {

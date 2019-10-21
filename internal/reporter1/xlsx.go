@@ -1,4 +1,4 @@
-package v1
+package reporter1
 
 import (
 	"github.com/tealeg/xlsx"

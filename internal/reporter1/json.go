@@ -1,4 +1,4 @@
-package v1
+package reporter1
 
 import (
 	"log"
@@ -43,8 +43,8 @@ func (r *Reporter) getJson() (Report, error) {
 	}
 
 	var cIndex int
-	report.Total = newTotal(raws[0])
-	report.Categories = []Category{newCategory(raws[0])}
+	report.Total = makeTotal(raws[0])
+	report.Categories = []Category{makeCategory(raws[0])}
 	for _, raw := range raws[1:] {
 		report.CostSum = sum(report.CostSum, raw.CostSum)
 		report.SellSum = sum(report.SellSum, raw.SellSum)
@@ -54,11 +54,11 @@ func (r *Reporter) getJson() (Report, error) {
 			report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
 			report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
 
-			report.Categories = append(report.Categories, newCategory(raw))
+			report.Categories = append(report.Categories, makeCategory(raw))
 			cIndex++
 			continue
 		}
-		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, newProduct(raw))
+		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(raw))
 		report.Categories[cIndex].CostSum = sum(report.Categories[cIndex].CostSum, raw.CostSum)
 		report.Categories[cIndex].SellSum = sum(report.Categories[cIndex].SellSum, raw.SellSum)
 		report.Categories[cIndex].Count = report.Categories[cIndex].Count + raw.Count
@@ -74,16 +74,16 @@ func (r *Reporter) getJson() (Report, error) {
 }
 
 //возвращает новую категорию
-func newCategory(r Raw) Category {
+func makeCategory(r Raw) Category {
 	return Category{
 		Name:     r.Category,
-		Total:    newTotal(r),
-		Products: []Product{newProduct(r)},
+		Total:    makeTotal(r),
+		Products: []Product{makeProduct(r)},
 	}
 }
 
 //возвращает новый продукт с сразу отформатированными данными
-func newProduct(r Raw) Product {
+func makeProduct(r Raw) Product {
 	return Product{
 		Name: r.Name,
 		Total: Total{
@@ -94,7 +94,7 @@ func newProduct(r Raw) Product {
 	}
 }
 
-func newTotal(r Raw) Total {
+func makeTotal(r Raw) Total {
 	return Total{
 		Count:   r.Count,
 		CostSum: r.CostSum,

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	report "github.com/delgus/reports/reports/v1"
+	report "github.com/delgus/reports/internal/reporter1"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -17,7 +17,7 @@ func main() {
 	reporter := report.NewReporter(db)
 	http.HandleFunc("/json", reporter.JSON)
 	http.HandleFunc("/xlsx", reporter.XLSX)
-	if err := http.ListenAndServe(":8010", nil); err != nil {
+	if err := http.ListenAndServe(":80", nil); err != nil {
 		panic(err)
 	}
 }

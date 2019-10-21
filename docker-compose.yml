@@ -5,26 +5,35 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: 123456
       PGDATA: /data/postgres
     volumes:
-      - ${PWD}/postgres:/docker-entrypoint-initdb.d
+      - ${PWD}/init:/docker-entrypoint-initdb.d
     ports:
       - "5000:5432"
     networks:
       - postgres
     restart: unless-stopped
 
-  report-server:
+  report-server-v1:
     image: golang:1.13
     ports:
-      - "8010:8010"
-      - "8020:8020"
-      - "8030:8030"
+      - "8010:80"
     volumes:
       - ${PWD}:/go/src/reports
     working_dir: /go/src/reports
-    command: sh -c "./bin/report1 && ./bin/report2 && ./bin/report3"
+    command: ./bin/report1
+    networks:
+      - postgres
+
+  report-server-v2:
+    image: golang:1.13
+    ports:
+      - "8020:80"
+    volumes:
+      - ${PWD}:/go/src/reports
+    working_dir: /go/src/reports
+    command: ./bin/report2
     networks:
       - postgres
 

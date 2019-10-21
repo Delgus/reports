@@ -1,4 +1,4 @@
-package v1
+package reporter1
 
 type Raw struct {
 	Category string `db:"category_name"`
