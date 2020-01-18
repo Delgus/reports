@@ -1,4 +1,4 @@
-[![Go Report Card](https://goreportcard.com/badge/github.com/delgus/report)](https://goreportcard.com/report/github.com/delgus/report)
+[![Go Report Card](https://goreportcard.com/badge/github.com/delgus/reports)](https://goreportcard.com/report/github.com/delgus/reports)
 
 ### пример API формирования отчетов на POSTGRES + GO
 
