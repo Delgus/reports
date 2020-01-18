@@ -11,7 +11,7 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 		return nil, err
 	}
 
-	report, err := r.getJson()
+	report, err := r.getJSON()
 	if err != nil {
 		return nil, err
 	}

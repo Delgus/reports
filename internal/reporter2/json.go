@@ -28,7 +28,7 @@ type Error struct {
 	Message string `json:"message"`
 }
 
-func (r *Reporter) getJson() (Report, error) {
+func (r *Reporter) getJSON() (Report, error) {
 	var report Report
 
 	raws, err := r.getRaws()
@@ -42,42 +42,43 @@ func (r *Reporter) getJson() (Report, error) {
 
 	var cIndex int
 	for _, raw := range raws {
+		raw := raw
 		if raw.RawType == grandTotal {
-			report.Total = makeTotal(raw)
+			report.Total = makeTotal(&raw)
 			continue
 		}
 		if raw.RawType == categoryTotal {
 			if report.Categories == nil {
-				report.Categories = []Category{makeCategory(raw)}
+				report.Categories = []Category{makeCategory(&raw)}
 				continue
 			}
-			report.Categories = append(report.Categories, makeCategory(raw))
+			report.Categories = append(report.Categories, makeCategory(&raw))
 			continue
 		}
 		if report.Categories[cIndex].Name != raw.Category {
 			cIndex++
-			report.Categories[cIndex].Products = []Product{makeProduct(raw)}
+			report.Categories[cIndex].Products = []Product{makeProduct(&raw)}
 		}
-		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(raw))
+		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(&raw))
 	}
 	return report, nil
 }
 
-func makeProduct(r Raw) Product {
+func makeProduct(r *Raw) Product {
 	return Product{
 		Name:  r.Name,
 		Total: makeTotal(r),
 	}
 }
 
-func makeCategory(r Raw) Category {
+func makeCategory(r *Raw) Category {
 	return Category{
 		Name:  r.Category,
 		Total: makeTotal(r),
 	}
 }
 
-func makeTotal(r Raw) Total {
+func makeTotal(r *Raw) Total {
 	return Total{
 		Count:   r.Count,
 		CostSum: r.CostSum,

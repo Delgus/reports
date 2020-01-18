@@ -1,8 +1,9 @@
 package reporter2
 
 import (
-	"github.com/tealeg/xlsx"
 	"sort"
+
+	"github.com/tealeg/xlsx"
 )
 
 func (r *Reporter) getXLSX() (*xlsx.File, error) {
@@ -18,7 +19,7 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 	}
 
 	sort.Slice(raws, func(i, j int) bool {
-		//общий итог опускаем вниз
+		// общий итог опускаем вниз
 		if raws[i].RawType == grandTotal {
 			return false
 		}
@@ -27,7 +28,7 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 		}
 
 		if raws[i].Category == raws[j].Category {
-			//внутри категории тоталы опускаем вниз
+			// внутри категории тоталы опускаем вниз
 			if raws[i].RawType == categoryTotal {
 				return false
 			}
@@ -35,17 +36,18 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 				return true
 			}
 
-			//сортировка по продуктам
+			// сортировка по продуктам
 			return raws[i].Name < raws[j].Name
 		}
-		//сортировка по категориям
+		// сортировка по категориям
 		return raws[i].Category < raws[j].Category
 	})
 
 	for _, raw := range raws {
+		raw := raw
 		row := sheet.AddRow()
 		row.AddCell().SetString(raw.Category)
-		row.AddCell().SetString(productNameOrTotal(raw))
+		row.AddCell().SetString(productNameOrTotal(&raw))
 		row.AddCell().SetInt(raw.Count)
 		row.AddCell().SetString(raw.CostSum)
 		row.AddCell().SetString(raw.SellSum)
@@ -53,7 +55,7 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 	return file, nil
 }
 
-func productNameOrTotal(r Raw) string {
+func productNameOrTotal(r *Raw) string {
 	switch r.RawType {
 	case grandTotal:
 		return "Общий итог:"

@@ -30,7 +30,7 @@ type Error struct {
 	Message string `json:"message"`
 }
 
-func (r *Reporter) getJson() (Report, error) {
+func (r *Reporter) getJSON() (Report, error) {
 	var report Report
 
 	raws, err := r.getRaws()
@@ -48,9 +48,9 @@ func (r *Reporter) getJson() (Report, error) {
 	for _, raw := range raws[1:] {
 		report.CostSum = sum(report.CostSum, raw.CostSum)
 		report.SellSum = sum(report.SellSum, raw.SellSum)
-		report.Count = report.Count + raw.Count
+		report.Count += raw.Count
 		if report.Categories[cIndex].Name != raw.Category {
-			//при добавлении новой категории надо отформатировать данные старой
+			// при добавлении новой категории надо отформатировать данные старой
 			report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
 			report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
 
@@ -61,19 +61,19 @@ func (r *Reporter) getJson() (Report, error) {
 		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(raw))
 		report.Categories[cIndex].CostSum = sum(report.Categories[cIndex].CostSum, raw.CostSum)
 		report.Categories[cIndex].SellSum = sum(report.Categories[cIndex].SellSum, raw.SellSum)
-		report.Categories[cIndex].Count = report.Categories[cIndex].Count + raw.Count
+		report.Categories[cIndex].Count += raw.Count
 	}
-	//отформатировать последнюю категорию
+	// отформатировать последнюю категорию
 	report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
 	report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
-	//отформатировать общие тоталы
+	// отформатировать общие тоталы
 	report.CostSum = formatCost(report.CostSum)
 	report.SellSum = formatCost(report.SellSum)
 
 	return report, nil
 }
 
-//возвращает новую категорию
+// возвращает новую категорию
 func makeCategory(r Raw) Category {
 	return Category{
 		Name:     r.Category,
@@ -82,7 +82,7 @@ func makeCategory(r Raw) Category {
 	}
 }
 
-//возвращает новый продукт с сразу отформатированными данными
+// возвращает новый продукт с сразу отформатированными данными
 func makeProduct(r Raw) Product {
 	return Product{
 		Name: r.Name,

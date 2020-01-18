@@ -16,10 +16,10 @@ func NewReporter(store *sqlx.DB) *Reporter {
 	return &Reporter{store: store}
 }
 
-//JSON вернет отчет в формате JSON
+// JSON вернет отчет в формате JSON
 func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	report, err := r.getJson()
+	report, err := r.getJSON()
 	if err != nil {
 		log.Println(err)
 		if err := json.NewEncoder(w).Encode(&Error{Message: "Ooops!"}); err != nil {
@@ -33,7 +33,7 @@ func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-//XSLX вернет отчет в формате XLSX
+// XSLX вернет отчет в формате XLSX
 func (r *Reporter) XLSX(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename=example.xlsx")
