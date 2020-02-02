@@ -19,7 +19,7 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 	}
 
 	sort.Slice(raws, func(i, j int) bool {
-		// общий итог опускаем вниз
+		// down grand total
 		if raws[i].RawType == grandTotal {
 			return false
 		}
@@ -28,7 +28,7 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 		}
 
 		if raws[i].Category == raws[j].Category {
-			// внутри категории тоталы опускаем вниз
+			// down category total
 			if raws[i].RawType == categoryTotal {
 				return false
 			}
@@ -36,10 +36,10 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 				return true
 			}
 
-			// сортировка по продуктам
+			// sort by product name
 			return raws[i].Name < raws[j].Name
 		}
-		// сортировка по категориям
+		// sort by category
 		return raws[i].Category < raws[j].Category
 	})
 
@@ -58,9 +58,9 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 func productNameOrTotal(r *Raw) string {
 	switch r.RawType {
 	case grandTotal:
-		return "Общий итог:"
+		return "Grand total:"
 	case categoryTotal:
-		return "Итого:"
+		return "Total:"
 	default:
 		return r.Name
 	}

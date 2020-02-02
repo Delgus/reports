@@ -2,28 +2,33 @@ package reporter2
 
 import "log"
 
+// Report is main root struct for Report
 type Report struct {
 	Categories []Category `json:"categories"`
 	Total
 }
 
+// Category is struct for category of products
 type Category struct {
 	Name     string    `json:"name"`
 	Products []Product `json:"products"`
 	Total
 }
 
+// Product is struct for product
 type Product struct {
 	Name string `json:"name"`
 	Total
 }
 
+// Total is struct for displaing parameters
 type Total struct {
 	Count   int    `json:"count"`
 	CostSum string `json:"cost_sum"`
 	SellSum string `json:"sell_sum"`
 }
 
+// Error is struct for displaing error
 type Error struct {
 	Message string `json:"message"`
 }

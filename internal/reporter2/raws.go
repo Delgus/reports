@@ -8,6 +8,7 @@ const (
 	product       = 3
 )
 
+// Raw content data for build report
 type Raw struct {
 	RawType  int    `db:"raw_type"`
 	Category string `db:"category_name"`

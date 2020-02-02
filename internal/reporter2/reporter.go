@@ -8,15 +8,17 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Reporter - service for build report
 type Reporter struct {
 	store *sqlx.DB
 }
 
+// NewReporter return new service Reporter
 func NewReporter(store *sqlx.DB) *Reporter {
 	return &Reporter{store: store}
 }
 
-// JSON вернет отчет в формате JSON
+// JSON return report in JSON
 func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	report, err := r.getJSON()
@@ -33,7 +35,7 @@ func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// XSLX вернет отчет в формате XLSX
+// XLSX return report in xlsx
 func (r *Reporter) XLSX(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename=example.xlsx")

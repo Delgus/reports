@@ -4,28 +4,33 @@ import (
 	"log"
 )
 
+// Report is main root struct for Report
 type Report struct {
 	Categories []Category `json:"categories"`
 	Total
 }
 
+// Category is struct for category of products
 type Category struct {
 	Name     string    `json:"name"`
 	Products []Product `json:"products"`
 	Total
 }
 
+// Product is struct for product
 type Product struct {
 	Name string `json:"name"`
 	Total
 }
 
+// Total is struct for displaing parameters
 type Total struct {
 	Count   int    `json:"count"`
 	CostSum string `json:"cost_sum"`
 	SellSum string `json:"sell_sum"`
 }
 
+// Error is struct for displaing error
 type Error struct {
 	Message string `json:"message"`
 }
@@ -50,7 +55,7 @@ func (r *Reporter) getJSON() (Report, error) {
 		report.SellSum = sum(report.SellSum, raw.SellSum)
 		report.Count += raw.Count
 		if report.Categories[cIndex].Name != raw.Category {
-			// при добавлении новой категории надо отформатировать данные старой
+			// before adding new category we need format current category
 			report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
 			report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
 
@@ -63,17 +68,16 @@ func (r *Reporter) getJSON() (Report, error) {
 		report.Categories[cIndex].SellSum = sum(report.Categories[cIndex].SellSum, raw.SellSum)
 		report.Categories[cIndex].Count += raw.Count
 	}
-	// отформатировать последнюю категорию
+	// format last category
 	report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
 	report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
-	// отформатировать общие тоталы
+	// format grand total
 	report.CostSum = formatCost(report.CostSum)
 	report.SellSum = formatCost(report.SellSum)
 
 	return report, nil
 }
 
-// возвращает новую категорию
 func makeCategory(r Raw) Category {
 	return Category{
 		Name:     r.Category,
@@ -82,7 +86,6 @@ func makeCategory(r Raw) Category {
 	}
 }
 
-// возвращает новый продукт с сразу отформатированными данными
 func makeProduct(r Raw) Product {
 	return Product{
 		Name: r.Name,

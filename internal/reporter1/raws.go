@@ -1,5 +1,6 @@
 package reporter1
 
+// Raw content data for build report
 type Raw struct {
 	Category string `db:"category_name"`
 	Name     string `db:"product_name"`

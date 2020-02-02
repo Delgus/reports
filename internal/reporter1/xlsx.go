@@ -26,14 +26,14 @@ func (r *Reporter) getXLSX() (*xlsx.File, error) {
 		}
 		row := sheet.AddRow()
 		row.AddCell().SetString(c.Name)
-		row.AddCell().SetString("Итого:")
+		row.AddCell().SetString("Total:")
 		row.AddCell().SetInt(c.Count)
 		row.AddCell().SetString(c.CostSum)
 		row.AddCell().SetString(c.SellSum)
 	}
 	row := sheet.AddRow()
 	row.AddCell().SetString("")
-	row.AddCell().SetString("Общий Итог:")
+	row.AddCell().SetString("Grand Total:")
 	row.AddCell().SetInt(report.Count)
 	row.AddCell().SetString(report.CostSum)
 	row.AddCell().SetString(report.SellSum)

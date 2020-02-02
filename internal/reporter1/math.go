@@ -11,7 +11,7 @@ const (
 	quantityPrecision = 6
 )
 
-// суммирует строки
+// sum numbers in strings
 func sum(s1, s2 string) string {
 	f1, is := new(big.Float).SetString(s1)
 	if !is {
@@ -24,7 +24,7 @@ func sum(s1, s2 string) string {
 	return new(big.Float).Add(f1, f2).Text('f', quantityPrecision)
 }
 
-// форматирует в формат цены
+// format cost
 func formatCost(s string) string {
 	f, err := strconv.ParseFloat(s, 64)
 	if err != nil {
