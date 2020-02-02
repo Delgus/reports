@@ -1,7 +1,6 @@
 package tests
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -21,8 +20,6 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	flag.Parse()
-	log.Print(`I work`)
 	os.Exit(testMain(m))
 }
 

@@ -1,6 +1,6 @@
 PKG := "github.com/delgus/reports"
 
-.PHONY: all fmt lint build clean help dep
+.PHONY: all fmt lint dep test build clean help
 
 all: fmt lint build test
 
@@ -17,9 +17,9 @@ build: ## Build the binary file
 	@go build -a -o bin/report1 -v $(PKG)/cmd/report1
 	@go build -a -o bin/report2 -v $(PKG)/cmd/report2
 
-test: ## Run integration tests
+test: ## Create container with test app
 	docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
-	docker-compose -f docker-compose.test.yml down --volumes
+	docker-compose -f docker-compose.test.yml down --volume
 
 clean: ## Remove previous build
 	@rm -f bin/report1 bin/report2

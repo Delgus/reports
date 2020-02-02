@@ -63,8 +63,9 @@ func (r *Reporter) getJSON() (Report, error) {
 		if report.Categories[cIndex].Name != raw.Category {
 			cIndex++
 			report.Categories[cIndex].Products = []Product{makeProduct(&raw)}
+		} else {
+			report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(&raw))
 		}
-		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(&raw))
 	}
 	return report, nil
 }

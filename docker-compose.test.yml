@@ -6,12 +6,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
-      PGDATA: /data/postgres
     volumes:
       - ${PWD}/init:/docker-entrypoint-initdb.d
     networks:
       - integration-networks
-    restart: on-failure
 
   reporters-integration:
     depends_on:
@@ -20,13 +18,15 @@ services:
       context: .
       dockerfile: Dockerfile.test
     environment:
-      - PG_HOST=postgres
+      - PG_HOST=db-integration
       - PG_USER=postgres
       - PG_PASSWORD=123456
       - PG_DBNAME=postgres
       - PG_PORT=5432
+    command: sh -c "CGO_ENABLED=0 GOOS=linux go test -v -short ./..."
     networks:
       - integration-networks
+    restart: on-failure:10
 
 networks:
   integration-networks:
