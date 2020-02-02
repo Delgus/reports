@@ -9,3 +9,6 @@
 
 # vendor
 /vendor
+
+# coverage report
+coverage.txt
