@@ -21,7 +21,7 @@ test: ## Run tests
 	@go test -short -coverprofile=coverage.txt ./...
 
 testdb: ## Create container with test database
-	docker-compose -f testdb.yml up --build --abort-on-container-exit
+	docker-compose -f testdb.yml up --build --abort-on-container-exit -d
 
 clean: ## Remove previous build
 	@rm -f bin/report1 bin/report2
