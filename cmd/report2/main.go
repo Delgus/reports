@@ -5,23 +5,15 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/delgus/reports/config"
 	report "github.com/delgus/reports/internal/reporter2"
 	"github.com/jmoiron/sqlx"
 	"github.com/kelseyhightower/envconfig"
 	_ "github.com/lib/pq"
 )
 
-type config struct {
-	PgHost     string `envconfig:"PG_HOST"`
-	PgUser     string `envconfig:"PG_USER"`
-	PgPassword string `envconfig:"PG_PASSWORD"`
-	PgDBName   string `envconfig:"PG_DBNAME"`
-	PgPort     int    `envconfig:"PG_PORT"`
-	AppPort    int    `envconfig:"APP_PORT"`
-}
-
 func main() {
-	var cfg config
+	var cfg config.Configuration
 	err := envconfig.Process("", &cfg)
 	if err != nil {
 		panic(err)

@@ -1,19 +1,11 @@
 # jetbrains project files
 .idea
 
-# netbeans project files
-nbproject
-
-# zend studio for eclipse project files
-.buildpath
-.project
-.settings
-
 # enviroment settings
 /.env
 
-#application data
-/data
-
-#binary files
+# binary files
 /bin
+
+# vendor
+/vendor

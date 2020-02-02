@@ -1,0 +1,33 @@
+version: '3.5'
+
+services:
+  db-integration:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /data/postgres
+    volumes:
+      - ${PWD}/init:/docker-entrypoint-initdb.d
+    networks:
+      - integration-networks
+    restart: on-failure
+
+  reporters-integration:
+    depends_on:
+      - db-integration
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      - PG_HOST=postgres
+      - PG_USER=postgres
+      - PG_PASSWORD=123456
+      - PG_DBNAME=postgres
+      - PG_PORT=5432
+    networks:
+      - integration-networks
+
+networks:
+  integration-networks:
+    driver: bridge
