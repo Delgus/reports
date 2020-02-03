@@ -1,27 +1,27 @@
-package reporter2
+package web
 
 import (
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/delgus/reports/internal/reports/report1"
 )
 
-// Reporter - service for build report
-type Reporter struct {
-	store *sqlx.DB
+// ReportHandler1 - report handler
+type ReportHandler1 struct {
+	service *report1.Service
 }
 
-// NewReporter return new service Reporter
-func NewReporter(store *sqlx.DB) *Reporter {
-	return &Reporter{store: store}
+// NewReportHandler1 return new service Reporter
+func NewReportHandler1(s *report1.Service) *ReportHandler1 {
+	return &ReportHandler1{service: s}
 }
 
 // JSON return report in JSON
-func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
+func (r *ReportHandler1) JSON(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	report, err := r.getJSON()
+	report, err := r.service.GetJSON()
 	if err != nil {
 		log.Println(err)
 		if err := json.NewEncoder(w).Encode(&Error{Message: "Ooops!"}); err != nil {
@@ -36,13 +36,13 @@ func (r *Reporter) JSON(w http.ResponseWriter, req *http.Request) {
 }
 
 // XLSX return report in xlsx
-func (r *Reporter) XLSX(w http.ResponseWriter, req *http.Request) {
+func (r *ReportHandler1) XLSX(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Header().Set("Content-Disposition", "attachment; filename=example.xlsx")
 	w.Header().Set("Content-Transfer-Encoding", "binary")
 	w.Header().Set("Expires", "0")
 
-	report, err := r.getXLSX()
+	report, err := r.service.GetXLSX()
 	if err != nil {
 		log.Println(err)
 		if err := json.NewEncoder(w).Encode(&Error{Message: "Ooops!"}); err != nil {

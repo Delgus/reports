@@ -1,17 +1,17 @@
-package reporter1
+package report1
 
 import (
 	"github.com/tealeg/xlsx"
 )
 
-func (r *Reporter) getXLSX() (*xlsx.File, error) {
+func (s *Service) GetXLSX() (*xlsx.File, error) {
 	file := xlsx.NewFile()
 	sheet, err := file.AddSheet("Sheet1")
 	if err != nil {
 		return nil, err
 	}
 
-	report, err := r.getJSON()
+	report, err := s.GetJSON()
 	if err != nil {
 		return nil, err
 	}

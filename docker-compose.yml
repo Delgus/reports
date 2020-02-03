@@ -16,12 +16,11 @@ services:
       - postgres
     restart: unless-stopped
 
-  report-server-v1:
+  reporter:
     build:
       context: .
       dockerfile: Dockerfile
-      target: report1
-    container_name: report_v1
+    container_name: reporter
     environment:
       - PG_HOST=postgres
       - PG_USER=postgres
@@ -31,24 +30,6 @@ services:
       - APP_PORT=80
     ports:
       - 8010:80
-    networks:
-      - postgres
-
-  report-server-v2:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: report2
-    container_name: report_v2
-    environment:
-      - PG_HOST=postgres
-      - PG_USER=postgres
-      - PG_PASSWORD=123456
-      - PG_DBNAME=postgres
-      - PG_PORT=5432
-      - APP_PORT=80
-    ports:
-      - 8020:80
     networks:
       - postgres
 

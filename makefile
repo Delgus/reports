@@ -1,6 +1,6 @@
 PKG := "github.com/delgus/reports"
 
-.PHONY: all fmt lint dep testdb test build clean help
+.PHONY: all fmt lint dep testdb-up testdb-down test build clean help
 
 all: help
 
@@ -14,16 +14,15 @@ dep: ## Get dependencies
 	@go mod vendor
 
 build: ## Build the binary file
-	@go build -a -o bin/report1 -v $(PKG)/cmd/report1
-	@go build -a -o bin/report2 -v $(PKG)/cmd/report2
+	@go build -a -o bin/reporter -v $(PKG)/cmd/reporter
 
 test: ## Run tests
 	@go test -short -coverprofile=coverage.txt ./...
 
-testdb-up: ## Create container with test database
+testdb-up: ## Up container with test database
 	docker-compose -f testdb.yml up --build -d
 
-testdb-down: ## Create container with test database
+testdb-down: ## Down container with test database
 	docker-compose -f testdb.yml down --volume
 
 clean: ## Remove previous build

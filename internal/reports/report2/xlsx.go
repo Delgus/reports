@@ -1,4 +1,4 @@
-package reporter2
+package report2
 
 import (
 	"sort"
@@ -6,14 +6,15 @@ import (
 	"github.com/tealeg/xlsx"
 )
 
-func (r *Reporter) getXLSX() (*xlsx.File, error) {
+// GetXLSX get xlsx
+func (s *Service) GetXLSX() (*xlsx.File, error) {
 	file := xlsx.NewFile()
 	sheet, err := file.AddSheet("Sheet1")
 	if err != nil {
 		return nil, err
 	}
 
-	raws, err := r.getRaws()
+	raws, err := s.getRaws()
 	if err != nil {
 		return nil, err
 	}

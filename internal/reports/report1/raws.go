@@ -1,4 +1,4 @@
-package reporter1
+package report1
 
 // Raw content data for build report
 type Raw struct {
@@ -9,7 +9,7 @@ type Raw struct {
 	SellSum  string `db:"sell_sum"`
 }
 
-func (r *Reporter) getRaws() ([]Raw, error) {
+func (s *Service) getRaws() ([]Raw, error) {
 	var raws []Raw
 	query := `
 select 
@@ -28,6 +28,6 @@ order by
   category_name,
   product_name
 `
-	err := r.store.Select(&raws, query)
+	err := s.store.Select(&raws, query)
 	return raws, err
 }

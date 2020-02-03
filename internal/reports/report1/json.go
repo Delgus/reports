@@ -1,4 +1,4 @@
-package reporter1
+package report1
 
 import (
 	"log"
@@ -30,15 +30,11 @@ type Total struct {
 	SellSum string `json:"sell_sum"`
 }
 
-// Error is struct for displaing error
-type Error struct {
-	Message string `json:"message"`
-}
-
-func (r *Reporter) getJSON() (Report, error) {
+// GetJSON get json
+func (s *Service) GetJSON() (Report, error) {
 	var report Report
 
-	raws, err := r.getRaws()
+	raws, err := s.getRaws()
 	if err != nil {
 		log.Println(err)
 		return report, err

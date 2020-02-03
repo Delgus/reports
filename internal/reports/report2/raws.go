@@ -1,4 +1,4 @@
-package reporter2
+package report2
 
 import "fmt"
 
@@ -18,7 +18,7 @@ type Raw struct {
 	SellSum  string `db:"sell_sum"`
 }
 
-func (r *Reporter) getRaws() ([]Raw, error) {
+func (s *Service) getRaws() ([]Raw, error) {
 	var raws []Raw
 	query := fmt.Sprintf(`
 select 
@@ -65,6 +65,6 @@ order by
   category_name,
   product_name
 `, product, categoryTotal, grandTotal)
-	err := r.store.Select(&raws, query)
+	err := s.store.Select(&raws, query)
 	return raws, err
 }
