@@ -1,34 +1,35 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/delgus/reports/config"
 	report "github.com/delgus/reports/internal/reporter1"
-	"github.com/jmoiron/sqlx"
-	"github.com/kelseyhightower/envconfig"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	var cfg config.Configuration
-	err := envconfig.Process("", &cfg)
+	cfg, err := config.GetConfig()
 	if err != nil {
-		panic(err)
+		log.Fatalf(`configuration error: %v`, err)
 	}
-	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%d",
-		cfg.PgHost, cfg.PgUser, cfg.PgPassword, cfg.PgDBName, cfg.PgPort)
 
-	db, err := sqlx.Open("postgres", connStr)
+	db, err := config.GetDBConnection(cfg)
 	if err != nil {
-		panic(err)
+		log.Fatalf(`db open connection error: %v`, err)
 	}
+	defer func() {
+		if err := db.Close(); err != nil {
+			log.Fatalf(`db close connection error: %v`, err)
+		}
+	}()
+
 	reporter := report.NewReporter(db)
 	http.HandleFunc("/json", reporter.JSON)
 	http.HandleFunc("/xlsx", reporter.XLSX)
 	if err := http.ListenAndServe(":"+strconv.Itoa(cfg.AppPort), nil); err != nil {
-		panic(err)
+		log.Println(err)
 	}
 }

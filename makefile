@@ -20,8 +20,11 @@ build: ## Build the binary file
 test: ## Run tests
 	@go test -short -coverprofile=coverage.txt ./...
 
-testdb: ## Create container with test database
+testdb-up: ## Create container with test database
 	docker-compose -f testdb.yml up --build -d
+
+testdb-down: ## Create container with test database
+	docker-compose -f testdb.yml down --volume
 
 clean: ## Remove previous build
 	@rm -f bin/report1 bin/report2
