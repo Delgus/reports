@@ -1,3 +1,4 @@
+[![codecov](https://codecov.io/gh/Delgus/reports/branch/master/graph/badge.svg)](https://codecov.io/gh/Delgus/reports)
 [![Go Report Card](https://goreportcard.com/badge/github.com/delgus/reports)](https://goreportcard.com/report/github.com/delgus/reports)
 
 ### пример API формирования отчетов на POSTGRES + GO
@@ -8,7 +9,6 @@
 
 #### 2 вариант - считаем итого при помощи запросов
 
-- Поднять контейнеры
-```bash
-docker-compose up
+Это учебный пример, но основанный на реальном опыте работы с Postgresql и Golang. Более подробная документация в разработке.
+
 ```
