@@ -1,19 +1,17 @@
 package report1
 
-import (
-	"log"
-)
+import "github.com/shopspring/decimal"
 
 // Report is main root struct for Report
 type Report struct {
-	Categories []Category `json:"categories"`
+	Categories []*Category `json:"categories"`
 	Total
 }
 
 // Category is struct for category of products
 type Category struct {
-	Name     string    `json:"name"`
-	Products []Product `json:"products"`
+	Name     string     `json:"name"`
+	Products []*Product `json:"products"`
 	Total
 }
 
@@ -30,73 +28,75 @@ type Total struct {
 	SellSum string `json:"sell_sum"`
 }
 
+type reportBuilder struct {
+	Report
+	currentCategory *Category
+	categorySellSum decimal.Decimal
+	totalSellSum    decimal.Decimal
+	categoryCostSum decimal.Decimal
+	totalCostSum    decimal.Decimal
+}
+
 // GetJSON get json
 func (s *Service) GetJSON() (Report, error) {
-	var report Report
-
 	raws, err := s.getRaws()
-	if err != nil {
-		log.Println(err)
-		return report, err
-	}
-	if len(raws) == 0 {
-		return report, nil
+	if err != nil || len(raws) == 0 {
+		return Report{}, err
 	}
 
-	var cIndex int
-	report.Total = makeTotal(raws[0])
-	report.Categories = []Category{makeCategory(raws[0])}
-	for _, raw := range raws[1:] {
-		report.CostSum = sum(report.CostSum, raw.CostSum)
-		report.SellSum = sum(report.SellSum, raw.SellSum)
-		report.Count += raw.Count
-		if report.Categories[cIndex].Name != raw.Category {
-			// before adding new category we need format current category
-			report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
-			report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
+	var rb reportBuilder
 
-			report.Categories = append(report.Categories, makeCategory(raw))
-			cIndex++
-			continue
+	for i := range raws {
+		if rb.isNewCategory(raws[i].Category) {
+			rb.AddCategory(raws[i])
 		}
-		report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(raw))
-		report.Categories[cIndex].CostSum = sum(report.Categories[cIndex].CostSum, raw.CostSum)
-		report.Categories[cIndex].SellSum = sum(report.Categories[cIndex].SellSum, raw.SellSum)
-		report.Categories[cIndex].Count += raw.Count
-	}
-	// format last category
-	report.Categories[cIndex].CostSum = formatCost(report.Categories[cIndex].CostSum)
-	report.Categories[cIndex].SellSum = formatCost(report.Categories[cIndex].SellSum)
-	// format grand total
-	report.CostSum = formatCost(report.CostSum)
-	report.SellSum = formatCost(report.SellSum)
 
-	return report, nil
+		rb.AddProduct(raws[i])
+	}
+
+	rb.AddTotal()
+
+	return rb.Report, nil
 }
 
-func makeCategory(r Raw) Category {
-	return Category{
+func (rb *reportBuilder) isNewCategory(category string) bool {
+	return len(rb.Categories) == 0 || category != rb.currentCategory.Name
+}
+
+func (rb *reportBuilder) AddCategory(r Raw) {
+	rb.currentCategory = &Category{
 		Name:     r.Category,
-		Total:    makeTotal(r),
-		Products: []Product{makeProduct(r)},
+		Products: make([]*Product, 0),
 	}
+
+	rb.categoryCostSum = decimal.Zero
+	rb.categorySellSum = decimal.Zero
 }
 
-func makeProduct(r Raw) Product {
-	return Product{
+func (rb *reportBuilder) AddProduct(r Raw) {
+	rb.currentCategory.Products = append(rb.currentCategory.Products, &Product{
 		Name: r.Name,
 		Total: Total{
 			Count:   r.Count,
-			CostSum: formatCost(r.CostSum),
-			SellSum: formatCost(r.SellSum),
+			CostSum: r.CostSum.StringFixed(2),
+			SellSum: r.SellSum.StringFixed(2),
 		},
-	}
+	})
+
+	rb.categorySellSum = rb.categorySellSum.Add(r.SellSum)
+	rb.currentCategory.SellSum = rb.categorySellSum.StringFixed(2)
+
+	rb.currentCategory.Count += r.Count
+
+	rb.categoryCostSum = rb.categoryCostSum.Add(r.CostSum)
+	rb.currentCategory.CostSum = rb.categoryCostSum.StringFixed(2)
+
+	rb.totalSellSum = rb.totalSellSum.Add(r.SellSum)
+	rb.totalCostSum = rb.totalCostSum.Add(r.CostSum)
+	rb.Count += r.Count
 }
 
-func makeTotal(r Raw) Total {
-	return Total{
-		Count:   r.Count,
-		CostSum: r.CostSum,
-		SellSum: r.SellSum,
-	}
+func (rb *reportBuilder) AddTotal() {
+	rb.CostSum = rb.totalCostSum.StringFixed(2)
+	rb.SellSum = rb.totalSellSum.StringFixed(2)
 }

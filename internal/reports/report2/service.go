@@ -1,15 +1,13 @@
 package report2
 
-import (
-	"github.com/jmoiron/sqlx"
-)
+import "github.com/go-pg/pg"
 
 // Service - service for build report
 type Service struct {
-	store *sqlx.DB
+	store *pg.DB
 }
 
 // NewService return new service Service
-func NewService(store *sqlx.DB) *Service {
+func NewService(store *pg.DB) *Service {
 	return &Service{store: store}
 }

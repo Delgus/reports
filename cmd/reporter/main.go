@@ -1,32 +1,30 @@
 package main
 
 import (
-	"log"
+	"net/http"
 
-	"github.com/delgus/reports/config"
 	"github.com/delgus/reports/internal/reports/report1"
 	"github.com/delgus/reports/internal/reports/report2"
 	"github.com/delgus/reports/web"
-	_ "github.com/lib/pq"
+	"github.com/go-pg/pg"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	// configuration
-	cfg, err := config.GetConfig()
+	cfg, err := getConfig()
 	if err != nil {
-		log.Fatalf(`configuration error: %v`, err)
+		logrus.Fatalf(`configuration error: %v`, err)
 	}
 
 	// create connections
-	db, err := config.GetDBConnection(cfg)
-	if err != nil {
-		log.Fatalf(`db open connection error: %v`, err)
-	}
-	defer func() {
-		if err := db.Close(); err != nil {
-			log.Fatalf(`db close connection error: %v`, err)
-		}
-	}()
+	db := pg.Connect(&pg.Options{
+		User:     cfg.PgUser,
+		Password: cfg.PgPassword,
+		Database: cfg.PgDBName,
+		Addr:     cfg.PgAddr,
+	})
+	defer db.Close()
 
 	// services
 	reporter1 := report1.NewService(db)
@@ -38,7 +36,7 @@ func main() {
 
 	// server
 	server := web.NewServer(reportHandler1, reportHandler2)
-	if err := server.Serve(cfg.AppPort); err != nil {
-		log.Println(err)
+	if err := server.Serve(cfg.AppPort); err != nil && err != http.ErrServerClosed {
+		logrus.Fatal(err)
 	}
 }

@@ -65,6 +65,6 @@ order by
   category_name,
   product_name
 `, product, categoryTotal, grandTotal)
-	err := s.store.Select(&raws, query)
+	_, err := s.store.Query(&raws, query)
 	return raws, err
 }

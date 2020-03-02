@@ -1,7 +1,5 @@
 package report2
 
-import "log"
-
 // Report is main root struct for Report
 type Report struct {
 	Categories []Category `json:"categories"`
@@ -30,37 +28,33 @@ type Total struct {
 
 // GetJSON get json
 func (s *Service) GetJSON() (Report, error) {
-	var report Report
-
 	raws, err := s.getRaws()
-	if err != nil {
-		log.Println(err)
-		return report, err
-	}
-	if len(raws) == 0 {
-		return report, nil
+	if err != nil || len(raws) == 0 {
+		return Report{}, err
 	}
 
 	var cIndex int
-	for _, raw := range raws {
-		raw := raw
-		if raw.RawType == grandTotal {
-			report.Total = makeTotal(&raw)
+	var report Report
+	for i := range raws {
+		if raws[i].RawType == grandTotal {
+			report.Total = makeTotal(&raws[i])
 			continue
 		}
-		if raw.RawType == categoryTotal {
+
+		if raws[i].RawType == categoryTotal {
 			if report.Categories == nil {
-				report.Categories = []Category{makeCategory(&raw)}
+				report.Categories = []Category{makeCategory(&raws[i])}
 				continue
 			}
-			report.Categories = append(report.Categories, makeCategory(&raw))
+			report.Categories = append(report.Categories, makeCategory(&raws[i]))
 			continue
 		}
-		if report.Categories[cIndex].Name != raw.Category {
+
+		if report.Categories[cIndex].Name != raws[i].Category {
 			cIndex++
-			report.Categories[cIndex].Products = []Product{makeProduct(&raw)}
+			report.Categories[cIndex].Products = []Product{makeProduct(&raws[i])}
 		} else {
-			report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(&raw))
+			report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(&raws[i]))
 		}
 	}
 	return report, nil
