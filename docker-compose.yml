@@ -25,7 +25,8 @@ services:
       - PG_USER=postgres
       - PG_PASSWORD=123456
       - PG_DBNAME=postgres
-      - PG_ADDR=postgres:5432
+      - PG_HOST=postgres
+      - PG_PORT=5432
       - APP_PORT=80
     ports:
       - 8010:80

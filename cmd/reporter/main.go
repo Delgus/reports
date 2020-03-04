@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/delgus/reports/internal/reports/report1"
 	"github.com/delgus/reports/internal/reports/report2"
 	"github.com/delgus/reports/web"
-	"github.com/go-pg/pg"
+	_ "github.com/jackc/pgx/stdlib"
+	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 )
 
@@ -18,12 +20,10 @@ func main() {
 	}
 
 	// create connections
-	db := pg.Connect(&pg.Options{
-		User:     cfg.PgUser,
-		Password: cfg.PgPassword,
-		Database: cfg.PgDBName,
-		Addr:     cfg.PgAddr,
-	})
+	db, err := newDBConnection(cfg)
+	if err != nil {
+		logrus.Fatal(err)
+	}
 	defer db.Close()
 
 	// services
@@ -39,4 +39,14 @@ func main() {
 	if err := server.Serve(cfg.AppPort); err != nil && err != http.ErrServerClosed {
 		logrus.Fatal(err)
 	}
+}
+
+func newDBConnection(cfg *configuration) (*sqlx.DB, error) {
+	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%d",
+		cfg.PgHost, cfg.PgUser, cfg.PgPassword, cfg.PgDBName, cfg.PgPort)
+	db, err := sqlx.Open("pgx", connStr)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }

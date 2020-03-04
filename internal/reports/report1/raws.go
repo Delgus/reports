@@ -30,6 +30,6 @@ order by
   category_name,
   product_name
 `
-	_, err := s.store.Query(&raws, query)
+	err := s.store.Select(&raws, query)
 	return raws, err
 }

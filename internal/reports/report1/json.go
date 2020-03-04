@@ -71,6 +71,7 @@ func (rb *reportBuilder) AddCategory(r Raw) {
 
 	rb.categoryCostSum = decimal.Zero
 	rb.categorySellSum = decimal.Zero
+	rb.Categories = append(rb.Categories, rb.currentCategory)
 }
 
 func (rb *reportBuilder) AddProduct(r Raw) {

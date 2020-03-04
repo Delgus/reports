@@ -2,9 +2,9 @@ package main
 
 import "github.com/kelseyhightower/envconfig"
 
-// Configuration is config for app
 type configuration struct {
-	PgAddr     string `envconfig:"PG_ADDR" default:"localhost:5432"`
+	PgPort     int    `envconfig:"PG_PORT" default:"5432"`
+	PgHost     string `envconfig:"PG_HOST" default:"localhost"`
 	PgUser     string `envconfig:"PG_USER" default:"postgres"`
 	PgPassword string `envconfig:"PG_PASSWORD" default:"123456"`
 	PgDBName   string `envconfig:"PG_DBNAME" default:"postgres"`
