@@ -15,10 +15,7 @@ jobs:
 
     - name: golangci-lint
       run: $(go env GOPATH)/bin/golangci-lint run
-
-    - name: create test database
-      run: make testdb-up
-
+    
     - name: run tests
       run: make test
 

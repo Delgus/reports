@@ -1,32 +1,30 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"net/http"
 
-	"github.com/delgus/reports/config"
 	"github.com/delgus/reports/internal/reports/report1"
 	"github.com/delgus/reports/internal/reports/report2"
 	"github.com/delgus/reports/web"
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/stdlib"
+	"github.com/jmoiron/sqlx"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	// configuration
-	cfg, err := config.GetConfig()
+	cfg, err := getConfig()
 	if err != nil {
-		log.Fatalf(`configuration error: %v`, err)
+		logrus.Fatalf(`configuration error: %v`, err)
 	}
 
 	// create connections
-	db, err := config.GetDBConnection(cfg)
+	db, err := newDBConnection(cfg)
 	if err != nil {
-		log.Fatalf(`db open connection error: %v`, err)
+		logrus.Fatal(err)
 	}
-	defer func() {
-		if err := db.Close(); err != nil {
-			log.Fatalf(`db close connection error: %v`, err)
-		}
-	}()
+	defer db.Close()
 
 	// services
 	reporter1 := report1.NewService(db)
@@ -38,7 +36,17 @@ func main() {
 
 	// server
 	server := web.NewServer(reportHandler1, reportHandler2)
-	if err := server.Serve(cfg.AppPort); err != nil {
-		log.Println(err)
+	if err := server.Serve(cfg.AppPort); err != nil && err != http.ErrServerClosed {
+		logrus.Fatal(err)
 	}
+}
+
+func newDBConnection(cfg *configuration) (*sqlx.DB, error) {
+	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%d",
+		cfg.PgHost, cfg.PgUser, cfg.PgPassword, cfg.PgDBName, cfg.PgPort)
+	db, err := sqlx.Open("pgx", connStr)
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
 }

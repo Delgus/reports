@@ -1,8 +1,6 @@
 package report1
 
-import (
-	"github.com/jmoiron/sqlx"
-)
+import "github.com/jmoiron/sqlx"
 
 // Service - service for build report
 type Service struct {

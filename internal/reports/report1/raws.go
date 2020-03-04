@@ -1,12 +1,14 @@
 package report1
 
+import "github.com/shopspring/decimal"
+
 // Raw content data for build report
 type Raw struct {
-	Category string `db:"category_name"`
-	Name     string `db:"product_name"`
-	Count    int    `db:"count"`
-	CostSum  string `db:"cost_sum"`
-	SellSum  string `db:"sell_sum"`
+	Category string          `db:"category_name"`
+	Name     string          `db:"product_name"`
+	Count    int             `db:"count"`
+	CostSum  decimal.Decimal `db:"cost_sum"`
+	SellSum  decimal.Decimal `db:"sell_sum"`
 }
 
 func (s *Service) getRaws() ([]Raw, error) {
