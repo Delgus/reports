@@ -17,7 +17,7 @@ build: ## Build the binary file
 	@go build -a -o reporter -v $(PKG)/cmd/reporter
 
 test: ## Run tests
-	@go test -short -coverprofile=coverage.txt ./...
+	@go-acc -o coverage.txt ./...
 
 clean: ## Remove previous build
 	@rm -f reporter
