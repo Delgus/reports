@@ -20,7 +20,7 @@ jobs:
       run: go get github.com/ory/go-acc
     
     - name: run tests
-      run: make test
+      run: $(go env GOPATH)/bin/go-acc -o coverage.txt ./...
 
     - uses: codecov/codecov-action@v1
       with:
