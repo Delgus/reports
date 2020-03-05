@@ -15,6 +15,9 @@ jobs:
 
     - name: golangci-lint
       run: $(go env GOPATH)/bin/golangci-lint run
+      
+    - name: install test tools
+      run: go get github.com/ory/go-acc
     
     - name: run tests
       run: make test
