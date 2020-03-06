@@ -15,6 +15,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v0.0.0-20200227202807-02e2044944cc
 	github.com/sirupsen/logrus v1.4.2
+	github.com/stretchr/testify v1.4.0
 	github.com/tealeg/xlsx v1.0.5
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
 )

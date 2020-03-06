@@ -8,6 +8,7 @@ type configuration struct {
 	PgUser     string `envconfig:"PG_USER" default:"postgres"`
 	PgPassword string `envconfig:"PG_PASSWORD" default:"123456"`
 	PgDBName   string `envconfig:"PG_DBNAME" default:"postgres"`
+	AppHost    string `envconfig:"APP_HOST" default:""`
 	AppPort    int    `envconfig:"APP_PORT" default:"80"`
 }
 

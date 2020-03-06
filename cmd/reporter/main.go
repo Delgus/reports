@@ -24,7 +24,11 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	defer db.Close()
+	defer func() {
+		if err := db.Close(); err != nil {
+			logrus.Error(err)
+		}
+	}()
 
 	// services
 	reporter1 := report1.NewService(db)
@@ -36,7 +40,8 @@ func main() {
 
 	// server
 	server := web.NewServer(reportHandler1, reportHandler2)
-	if err := server.Serve(cfg.AppPort); err != nil && err != http.ErrServerClosed {
+	addr := fmt.Sprintf(`%s:%d`, cfg.AppHost, cfg.AppPort)
+	if err := server.Serve(addr); err != nil && err != http.ErrServerClosed {
 		logrus.Fatal(err)
 	}
 }
