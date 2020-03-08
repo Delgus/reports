@@ -14,9 +14,11 @@ type configuration struct {
 
 func getConfig() (*configuration, error) {
 	var cfg configuration
+
 	err := envconfig.Process("", &cfg)
 	if err != nil {
 		return nil, err
 	}
+
 	return &cfg, nil
 }

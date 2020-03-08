@@ -21,5 +21,6 @@ func (s *Server) Serve(addr string) error {
 	http.HandleFunc("/r1/xlsx", s.r1.XLSX)
 	http.HandleFunc("/r2/json", s.r2.JSON)
 	http.HandleFunc("/r2/xlsx", s.r2.XLSX)
+
 	return http.ListenAndServe(addr, nil)
 }

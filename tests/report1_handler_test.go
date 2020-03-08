@@ -17,14 +17,18 @@ func TestReporter1JSON(t *testing.T) {
 	if err != nil {
 		t.Errorf("error creating request: %v", err)
 	}
+
 	w := httptest.NewRecorder()
 
 	reporter := web.NewReportHandler1(report1.NewService(GetDB()))
 	reporter.JSON(w, req)
+
 	if exp, got := http.StatusOK, w.Code; exp != got {
 		t.Errorf("expected status code: %v, got status code: %v", exp, got)
 	}
+
 	answer := w.Body.String()
+
 	if strings.TrimSpace(answer) != strings.TrimSpace(testJSON) {
 		t.Errorf("unexpected response expect - %s got - %s", testJSON, answer)
 	}
@@ -35,10 +39,12 @@ func TestReporter1XLSX(t *testing.T) {
 	if err != nil {
 		t.Errorf("error creating request: %v", err)
 	}
+
 	w := httptest.NewRecorder()
 
 	reporter := web.NewReportHandler1(report1.NewService(GetDB()))
 	reporter.XLSX(w, req)
+
 	if exp, got := http.StatusOK, w.Code; exp != got {
 		t.Errorf("expected status code: %v, got status code: %v", exp, got)
 	}

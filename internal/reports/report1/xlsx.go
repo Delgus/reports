@@ -19,6 +19,7 @@ type xlsxBuilder struct {
 // GetXLSX get report with xlsx
 func (s *Service) GetXLSX() (*xlsx.File, error) {
 	file := xlsx.NewFile()
+
 	sheet, err := file.AddSheet("Sheet1")
 	if err != nil {
 		return nil, err
@@ -30,12 +31,15 @@ func (s *Service) GetXLSX() (*xlsx.File, error) {
 	}
 
 	xb := xlsxBuilder{sheet: sheet}
+
 	for i := range raws {
 		xb.AddCategoryIfNeed(raws[i].Category, i)
 		xb.AddProduct(raws[i])
 	}
+
 	xb.AddCategory()
 	xb.AddTotal()
+
 	return file, nil
 }
 
@@ -55,8 +59,10 @@ func (xb *xlsxBuilder) AddCategory() {
 	row.AddCell().SetString(xb.currentCategory)
 	row.AddCell().SetString("Total:")
 	row.AddCell().SetInt(xb.categoryCount)
+
 	costSum, _ := xb.categoryCostSum.Round(2).Float64()
 	row.AddCell().SetFloat(costSum)
+
 	sellSum, _ := xb.categorySellSum.Round(2).Float64()
 	row.AddCell().SetFloat(sellSum)
 }
@@ -66,8 +72,10 @@ func (xb *xlsxBuilder) AddProduct(r Raw) {
 	row.AddCell().SetString(r.Category)
 	row.AddCell().SetString(r.Name)
 	row.AddCell().SetInt(r.Count)
+
 	costSum, _ := r.CostSum.Round(2).Float64()
 	row.AddCell().SetFloat(costSum)
+
 	sellSum, _ := r.SellSum.Round(2).Float64()
 	row.AddCell().SetFloat(sellSum)
 
@@ -85,8 +93,10 @@ func (xb *xlsxBuilder) AddTotal() {
 	row.AddCell().SetString("")
 	row.AddCell().SetString("Grand Total:")
 	row.AddCell().SetInt(xb.totalCount)
+
 	costSum, _ := xb.totalCostSum.Round(2).Float64()
 	row.AddCell().SetFloat(costSum)
+
 	sellSum, _ := xb.totalSellSum.Round(2).Float64()
 	row.AddCell().SetFloat(sellSum)
 }

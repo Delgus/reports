@@ -9,6 +9,7 @@ import (
 // GetXLSX get xlsx
 func (s *Service) GetXLSX() (*xlsx.File, error) {
 	file := xlsx.NewFile()
+
 	sheet, err := file.AddSheet("Sheet1")
 	if err != nil {
 		return nil, err
@@ -53,6 +54,7 @@ func (s *Service) GetXLSX() (*xlsx.File, error) {
 		row.AddCell().SetString(raw.CostSum)
 		row.AddCell().SetString(raw.SellSum)
 	}
+
 	return file, nil
 }
 

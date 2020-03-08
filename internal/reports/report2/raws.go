@@ -20,6 +20,7 @@ type Raw struct {
 
 func (s *Service) getRaws() ([]Raw, error) {
 	var raws []Raw
+
 	query := fmt.Sprintf(`
 select 
   %d as raw_type,
@@ -65,6 +66,8 @@ order by
   category_name,
   product_name
 `, product, categoryTotal, grandTotal)
+
 	err := s.store.Select(&raws, query)
+
 	return raws, err
 }

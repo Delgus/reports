@@ -24,6 +24,16 @@ make build
 go get github.com/ory/go-acc
 ```
 
+Форматирование кода всего проекта:
+```bash
+make fmt
+```
+
+Запуск линтеров:
+```bash
+make lint
+```
+
 Запуск тестов:
 ```bash
 make test

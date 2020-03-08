@@ -1,6 +1,6 @@
 PKG := "github.com/delgus/reports"
 
-.PHONY: all fmt lint dep testdb-up testdb-down test build clean help
+.PHONY: all fmt lint dep build test clean help
 
 all: help
 

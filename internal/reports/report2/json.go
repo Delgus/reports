@@ -34,7 +34,9 @@ func (s *Service) GetJSON() (Report, error) {
 	}
 
 	var cIndex int
+
 	var report Report
+
 	for i := range raws {
 		if raws[i].RawType == grandTotal {
 			report.Total = makeTotal(&raws[i])
@@ -46,17 +48,21 @@ func (s *Service) GetJSON() (Report, error) {
 				report.Categories = []Category{makeCategory(&raws[i])}
 				continue
 			}
+
 			report.Categories = append(report.Categories, makeCategory(&raws[i]))
+
 			continue
 		}
 
 		if report.Categories[cIndex].Name != raws[i].Category {
 			cIndex++
+
 			report.Categories[cIndex].Products = []Product{makeProduct(&raws[i])}
 		} else {
 			report.Categories[cIndex].Products = append(report.Categories[cIndex].Products, makeProduct(&raws[i]))
 		}
 	}
+
 	return report, nil
 }
 

@@ -24,6 +24,7 @@ func main() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
+
 	defer func() {
 		if err := db.Close(); err != nil {
 			logrus.Error(err)
@@ -41,6 +42,7 @@ func main() {
 	// server
 	server := web.NewServer(reportHandler1, reportHandler2)
 	addr := fmt.Sprintf(`%s:%d`, cfg.AppHost, cfg.AppPort)
+
 	if err := server.Serve(addr); err != nil && err != http.ErrServerClosed {
 		logrus.Fatal(err)
 	}
@@ -49,9 +51,11 @@ func main() {
 func newDBConnection(cfg *configuration) (*sqlx.DB, error) {
 	connStr := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable port=%d",
 		cfg.PgHost, cfg.PgUser, cfg.PgPassword, cfg.PgDBName, cfg.PgPort)
+
 	db, err := sqlx.Open("pgx", connStr)
 	if err != nil {
 		return nil, err
 	}
+
 	return db, nil
 }

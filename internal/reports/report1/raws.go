@@ -13,6 +13,7 @@ type Raw struct {
 
 func (s *Service) getRaws() ([]Raw, error) {
 	var raws []Raw
+
 	query := `
 select 
   product_name,
@@ -30,6 +31,8 @@ order by
   category_name,
   product_name
 `
+
 	err := s.store.Select(&raws, query)
+
 	return raws, err
 }
